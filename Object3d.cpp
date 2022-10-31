@@ -647,6 +647,7 @@ void Object3d::Update()
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	//constMap->color = color;
 	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
+	constMap->mat = matView * matProjection;	// 行列の合成
 	constBuff->Unmap(0, nullptr);
 }
 

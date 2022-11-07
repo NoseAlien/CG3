@@ -25,7 +25,7 @@ CD3DX12_CPU_DESCRIPTOR_HANDLE Object3d::cpuDescHandleSRV;
 CD3DX12_GPU_DESCRIPTOR_HANDLE Object3d::gpuDescHandleSRV;
 XMMATRIX Object3d::matView{};
 XMMATRIX Object3d::matProjection{};
-XMFLOAT3 Object3d::eye = { 0, 0, -50.0f };
+XMFLOAT3 Object3d::eye = { 0, 0, -5.0f };
 XMFLOAT3 Object3d::target = { 0, 0, 0 };
 XMFLOAT3 Object3d::up = { 0, 1, 0 };
 D3D12_VERTEX_BUFFER_VIEW Object3d::vbView{};
@@ -269,7 +269,7 @@ void Object3d::InitializeGraphicsPipeline()
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		},
-		{ // 法線ベクトル(1行で書いたほうが見やすい)
+		/*{ // 法線ベクトル(1行で書いたほうが見やすい)
 			"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
@@ -278,7 +278,7 @@ void Object3d::InitializeGraphicsPipeline()
 			"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},
+		},*/
 	};
 
 	// グラフィックスパイプラインの流れを設定

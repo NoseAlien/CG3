@@ -36,6 +36,7 @@ void main(
 	for (uint i = 0;i < vnum;i++)
 	{
 		element.svpos = input[0].pos + offset_array[i];
+		element.svpos = mul(mat, element.svpos);
 		element.uv = uv_array[i];
 		output.Append(element);
 	}

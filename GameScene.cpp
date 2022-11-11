@@ -48,6 +48,24 @@ void GameScene::Update()
 		else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
 	}
 
+	const float rnd_pos = 10.0f;
+	XMFLOAT3 pos{};
+	pos.x = (float)rand() / RAND_MAX * rnd_pos / 2.0f;
+	pos.y = (float)rand() / RAND_MAX * rnd_pos / 2.0f;
+	pos.z = (float)rand() / RAND_MAX * rnd_pos / 2.0f;
+
+	const float rnd_vel = 10.0f;
+	XMFLOAT3 vel{};
+	vel.x = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
+	vel.y = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
+	vel.z = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
+
+	const float rnd_acc = 0.001f;
+	XMFLOAT3 acc{};
+	acc.y = (float)rand() / RAND_MAX * rnd_acc;
+
+	object3d->Add(60, pos, vel, acc);
+
 	object3d->Update();
 }
 

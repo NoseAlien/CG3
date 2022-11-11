@@ -5,6 +5,7 @@
 #include <d3d12.h>
 #include <DirectXMath.h>
 #include <d3dx12.h>
+#include <forward_list>
 
 /// <summary>
 /// 3Dオブジェクト
@@ -32,6 +33,18 @@ public: // サブクラス
 	{
 		XMMATRIX mat;
 		XMMATRIX matBillboard;	// ビルボード行列
+	};
+
+	//パーティクル1粒
+	struct Particle
+	{
+		using XMFLOAT3 = DirectX::XMFLOAT3;
+
+		XMFLOAT3 position = {};
+		XMFLOAT3 velocity = {};
+		XMFLOAT3 accel = {};
+		int frame = 0;
+		int num_frame = 0;
 	};
 
 private: // 定数
@@ -197,7 +210,12 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
-private: // メンバ変数
-	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
-};
+	void Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel);
 
+private: // メンバ変数
+	static const int vertexMaxCount = 1024;
+
+	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
+	std::forward_list<Particle>particles;
+};
+const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs);

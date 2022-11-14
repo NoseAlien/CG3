@@ -50,19 +50,21 @@ void GameScene::Update()
 
 	const float rnd_pos = 10.0f;
 	XMFLOAT3 pos{};
-	pos.x = (float)rand() / RAND_MAX * rnd_pos / 2.0f;
-	pos.y = (float)rand() / RAND_MAX * rnd_pos / 2.0f;
-	pos.z = (float)rand() / RAND_MAX * rnd_pos / 2.0f;
+	pos.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
+	pos.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
+	pos.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
 
-	const float rnd_vel = 10.0f;
+	const float rnd_vel = 0.1f;
 	XMFLOAT3 vel{};
-	vel.x = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
-	vel.y = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
-	vel.z = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
+	vel.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
+	vel.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
+	vel.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
 
 	const float rnd_acc = 0.001f;
 	XMFLOAT3 acc{};
-	acc.y = (float)rand() / RAND_MAX * rnd_acc;
+	acc.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
+	acc.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
+	acc.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
 
 	object3d->Add(60, pos, vel, acc);
 

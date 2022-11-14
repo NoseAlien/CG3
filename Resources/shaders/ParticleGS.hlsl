@@ -24,18 +24,15 @@ void main(
 	inout TriangleStream< GSOutput > output
 )
 {
-	/*for (uint i = 0; i < 3; i++)
-	{
-		GSOutput element;
-		element.svpos = input[i].svpos;
-		element.normal = input[i].normal;
-		element.uv = input[i].uv;
-		output.Append(element);
-	}*/
 	GSOutput element;
 	for (uint i = 0;i < vnum;i++)
 	{
-		float4 offset = mul(matBillboard, offset_array[i]);
+		float4 offset = offset_array[i] * input[0].scale;
+		float rotedX = offset.x * cos(input[0].rot) + offset.y * -sin(input[0].rot);
+		float rotedY = offset.x * sin(input[0].rot) + offset.y * cos(input[0].rot);
+		offset.x = rotedX;
+		offset.y = rotedY;
+		offset = mul(matBillboard, offset);
 		element.svpos = input[0].pos + offset;
 		element.svpos = mul(mat, element.svpos);
 		element.uv = uv_array[i];

@@ -6,6 +6,8 @@
 #include <d3dx12.h>
 #include <dxgi1_6.h>
 #include <wrl.h>
+#include <chrono>
+#include <thread>
 
 #include "WinApp.h"
 
@@ -98,6 +100,9 @@ class DirectXCommon {
 	int32_t backBufferWidth_ = 0;
 	int32_t backBufferHeight_ = 0;
 
+	//FPS固定関連
+	std::chrono::steady_clock::time_point reference_;
+
   private: // メンバ関数
 	DirectXCommon() = default;
 	~DirectXCommon() = default;
@@ -138,4 +143,7 @@ class DirectXCommon {
 	/// imgui初期化
 	/// </summary>
 	void InitImgui();
+
+	void InitializeFixFPS();
+	void UpdateFixFPS();
 };

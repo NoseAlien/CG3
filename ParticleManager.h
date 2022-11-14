@@ -26,6 +26,8 @@ public: // サブクラス
 	struct VertexPos
 	{
 		XMFLOAT3 pos; // xyz座標
+		float rotation;
+		float scale;
 	};
 
 	// 定数バッファ用データ構造体
@@ -43,6 +45,10 @@ public: // サブクラス
 		XMFLOAT3 position = {};
 		XMFLOAT3 velocity = {};
 		XMFLOAT3 accel = {};
+		float rotation = 0;
+		float spin = 0.2f;
+		float scale = 0;
+		float maxScale = 1;
 		int frame = 0;
 		int num_frame = 0;
 	};
@@ -52,7 +58,7 @@ private: // 定数
 	static const float radius;				// 底面の半径
 	static const float prizmHeight;			// 柱の高さ
 	static const int planeCount = division * 2 + division * 2;		// 面の数
-	static const int vertexCount = 30;		// 頂点数
+	static const int vertexCount = 60;		// 頂点数
 	//static const int indexCount = 3 * 2;
 	
 public: // 静的メンバ関数

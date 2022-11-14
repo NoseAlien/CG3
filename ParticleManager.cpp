@@ -265,16 +265,16 @@ void ParticleManager::InitializeGraphicsPipeline()
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		},
-		/*{ // 法線ベクトル(1行で書いたほうが見やすい)
-			"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+		{ // 角度
+			"ROTATION", 0, DXGI_FORMAT_R32_FLOAT, 0,
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		},
-		{ // uv座標(1行で書いたほうが見やすい)
-			"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
+		{ // スケール
+			"SCALE", 0, DXGI_FORMAT_R32_FLOAT, 0,
 			D3D12_APPEND_ALIGNED_ELEMENT,
 			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
-		},*/
+		},
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -363,7 +363,7 @@ void ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	// WICテクスチャのロード
-	result = LoadFromWICFile(L"Resources/tex1.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	result = LoadFromWICFile(L"Resources/apEGnoSE.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	assert(SUCCEEDED(result));
 
 	ScratchImage mipChain{};
@@ -458,34 +458,6 @@ void ParticleManager::CreateModel()
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
 	vbView.SizeInBytes = sizeof(vertices);
 	vbView.StrideInBytes = sizeof(vertices[0]);
-
-	/*UINT sizeIB = static_cast<UINT>(sizeof(indices));
-	// リソース設定
-	resourceDesc.Width = sizeIB;
-
-	// インデックスバッファ生成
-	result = device->CreateCommittedResource(
-		&heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr,
-		IID_PPV_ARGS(&indexBuff));
-
-	// インデックスバッファへのデータ転送
-	unsigned short* indexMap = nullptr;
-	result = indexBuff->Map(0, nullptr, (void**)&indexMap);
-	if (SUCCEEDED(result)) {
-
-		// 全インデックスに対して
-		for (int i = 0; i < _countof(indices); i++)
-		{
-			indexMap[i] = indices[i];	// インデックスをコピー
-		}
-
-		indexBuff->Unmap(0, nullptr);
-	}
-
-	// インデックスバッファビューの作成
-	ibView.BufferLocation = indexBuff->GetGPUVirtualAddress();
-	ibView.Format = DXGI_FORMAT_R16_UINT;
-	ibView.SizeInBytes = sizeof(indices);*/
 }
 
 void ParticleManager::UpdateViewMatrix()
@@ -598,6 +570,10 @@ void ParticleManager::Update()
 		it->velocity = it->velocity + it->accel;
 		//速度による移動
 		it->position = it->position + it->velocity;
+
+		it->rotation += it->spin;
+
+		it->scale = (float)sin(it->frame / (float)it->num_frame * 3.1415) * it->maxScale;
 	}
 
 	//寿命が尽きたパーティクルを全削除
@@ -618,6 +594,9 @@ void ParticleManager::Update()
 		{
 			//座標
 			vertMap->pos = it->position;
+			vertMap->rotation = it->rotation;
+			vertMap->scale = it->scale;
+
 			//次の頂点へ
 			vertMap++;
 		}

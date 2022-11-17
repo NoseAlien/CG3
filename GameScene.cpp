@@ -11,6 +11,7 @@ GameScene::~GameScene()
 {
 	delete spriteBG;
 	delete object3d;
+	delete particleMan;
 }
 
 void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
@@ -33,8 +34,11 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	object3d = ParticleManager::Create();
+	object3d = Object3d::Create();
 	object3d->Update();
+	// パーティクルマネージャー生成
+	particleMan = ParticleManager::Create();
+	particleMan->Update();
 }
 
 void GameScene::Update()
@@ -66,7 +70,9 @@ void GameScene::Update()
 	acc.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
 	acc.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
 
-	object3d->Add(60, pos, vel, acc);
+	particleMan->Add(60, pos, vel, acc);
+
+	particleMan->Update();
 
 	object3d->Update();
 }
@@ -97,7 +103,7 @@ void GameScene::Draw()
 	ParticleManager::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	object3d->Draw();
+	particleMan->Draw();
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる

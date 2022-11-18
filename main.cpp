@@ -27,8 +27,11 @@ int WINAPI WinMain(HINSTANCE,HINSTANCE,LPSTR,int)
 	// スプライト静的初期化
 	Sprite::StaticInitialize(dxCommon->GetDevice(), WinApp::kWindowWidth, WinApp::kWindowHeight);
 	
-	// 3Dオブジェクト静的初期化
+	// パーティクル静的初期化
 	ParticleManager::StaticInitialize(dxCommon->GetDevice(), WinApp::kWindowWidth, WinApp::kWindowHeight);
+
+	// 3Dオブジェクト静的初期化
+	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::kWindowWidth, WinApp::kWindowHeight);
 #pragma endregion
 
 	// ゲームシーンの初期化

@@ -61,7 +61,11 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 	Sprite* spriteBG = nullptr;
+
 	Object3d* object3d = nullptr;
+	Object3d* billboard = nullptr;
+	Object3d* ybillboard = nullptr;
+
 	ParticleManager* particleMan = nullptr;
 };
 

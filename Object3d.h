@@ -6,6 +6,13 @@
 #include <DirectXMath.h>
 #include <d3dx12.h>
 
+enum BillboardMode
+{
+	NotBillboard,
+	Billboard,
+	YBillboard,
+};
+
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
@@ -210,8 +217,11 @@ public: // メンバ関数
 	/// <param name="position">座標</param>
 	void SetPosition(const XMFLOAT3& position) { this->position = position; }
 
+	void SetBillboardMode(BillboardMode setmode);
+
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
+	BillboardMode billmode = NotBillboard;
 	// 色
 	XMFLOAT4 color = { 1,1,1,1 };
 	// ローカルスケール

@@ -1,6 +1,8 @@
 ﻿#include "GameScene.h"
 #include <cassert>
 
+#include "WinApp.h"
+
 using namespace DirectX;
 
 GameScene::GameScene()
@@ -11,6 +13,8 @@ GameScene::~GameScene()
 {
 	delete spriteBG;
 	delete object3d;
+	delete billboard;
+	delete ybillboard;
 	delete particleMan;
 }
 
@@ -29,13 +33,26 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	debugText.Initialize(debugTextTexNumber);
 
 	// テクスチャ読み込み
-	Sprite::LoadTexture(1, L"Resources/background.png");
+	Sprite::LoadTexture(1, L"Resources/MEGNOSE.png");
 
 	// 背景スプライト生成
-	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
+	spriteBG = Sprite::Create(1, { WinApp::kWindowWidth / 2, WinApp::kWindowHeight / 2 }, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
+	spriteBG->SetSize({ WinApp::kWindowWidth * 1.4, WinApp::kWindowHeight * 1.4 });
+
 	// 3Dオブジェクト生成
 	object3d = Object3d::Create();
 	object3d->Update();
+
+	billboard = Object3d::Create();
+	billboard->SetBillboardMode(Billboard);
+	billboard->SetPosition({3,0,0});
+	billboard->Update();
+
+	ybillboard = Object3d::Create();
+	ybillboard->SetBillboardMode(YBillboard);
+	ybillboard->SetPosition({ -3,0,0 });
+	ybillboard->Update();
+
 	// パーティクルマネージャー生成
 	particleMan = ParticleManager::Create();
 	particleMan->Update();
@@ -51,6 +68,9 @@ void GameScene::Update()
 		if (input->PushKey(DIK_D)) { ParticleManager::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
 		else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
 	}
+
+	Object3d::SetEye(ParticleManager::GetEye());
+	Object3d::SetTarget(ParticleManager::GetTarget());
 
 	const float rnd_pos = 10.0f;
 	XMFLOAT3 pos{};
@@ -75,6 +95,8 @@ void GameScene::Update()
 	particleMan->Update();
 
 	object3d->Update();
+	billboard->Update();
+	ybillboard->Update();
 }
 
 void GameScene::Draw()
@@ -100,16 +122,33 @@ void GameScene::Draw()
 
 #pragma region 3Dオブジェクト描画
 	// 3Dオブジェクト描画前処理
-	ParticleManager::PreDraw(cmdList);
+	Object3d::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	particleMan->Draw();
+	object3d->Draw();
+	billboard->Draw();
+	ybillboard->Draw();
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
 	// 3Dオブジェクト描画後処理
+	Object3d::PostDraw();
+#pragma endregion
+
+#pragma region パーティクル描画
+	// パーティクル描画前処理
+	ParticleManager::PreDraw(cmdList);
+
+	// パーティクルの描画
+	particleMan->Draw();
+
+	/// <summary>
+	/// ここにパーティクルの描画処理を追加できる
+	/// </summary>
+
+	// パーティクル描画後処理
 	ParticleManager::PostDraw();
 #pragma endregion
 

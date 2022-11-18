@@ -257,8 +257,10 @@ void Object3d::InitializeGraphicsPipeline()
 	gpipeline.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
 	//gpipeline.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 	//gpipeline.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+
 	// デプスステンシルステート
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+	gpipeline.BlendState.AlphaToCoverageEnable = true;
 
 	// レンダーターゲットのブレンド設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
@@ -328,7 +330,7 @@ void Object3d::LoadTexture()
 	ScratchImage scratchImg{};
 
 	// WICテクスチャのロード
-	result = LoadFromWICFile( L"Resources/tex1.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	result = LoadFromWICFile( L"Resources/napnose.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	assert(SUCCEEDED(result));
 
 	ScratchImage mipChain{};
@@ -400,10 +402,10 @@ void Object3d::CreateModel()
 	
 	//四角形の頂点データ
 	VertexPosNormalUv verticesSquare[] = {
-		{{-5.0f,-5.0f,0.0f},{0,0,1},{0,1}},
-		{{-5.0f,5.0f,0.0f},{0,0,1},{0,0}},
-		{{5.0f,-5.0f,0.0f},{0,0,1},{1,1}},
-		{{5.0f,5.0f,0.0f},{0,0,1},{1,0}},
+		{{-1.0f,-1.0f,0.0f},{0,0,1},{0,1}},
+		{{-1.0f,1.0f,0.0f},{0,0,1},{0,0}},
+		{{1.0f,-1.0f,0.0f},{0,0,1},{1,1}},
+		{{1.0f,1.0f,0.0f},{0,0,1},{1,0}},
 	};
 	//メンバ変数にコピー
 	std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
@@ -584,8 +586,18 @@ void Object3d::Update()
 	// ワールド行列の合成
 	matWorld = XMMatrixIdentity(); // 変形をリセット
 
-	//matWorld *= matBillBoard;//ビルボード行列を掛ける
-	matWorld *= matBillBoardY;//Y軸ビルボード行列を掛ける
+	switch (billmode)
+	{
+	case(NotBillboard):
+		matWorld = matRot;
+		break;
+	case(Billboard):
+		matWorld *= matBillBoard;//ビルボード行列を掛ける
+		break;
+	case(YBillboard):
+		matWorld *= matBillBoardY;//Y軸ビルボード行列を掛ける
+		break;
+	}
 
 	matWorld *= matScale; // ワールド行列にスケーリングを反映
 	matWorld *= matRot; // ワールド行列に回転を反映
@@ -626,4 +638,9 @@ void Object3d::Draw()
 	cmdList->SetGraphicsRootDescriptorTable(1, gpuDescHandleSRV);
 	// 描画コマンド
 	cmdList->DrawIndexedInstanced(_countof(indices), 1, 0, 0, 0);
+}
+
+void Object3d::SetBillboardMode(BillboardMode setmode)
+{
+	billmode = setmode;
 }

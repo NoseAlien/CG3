@@ -69,28 +69,40 @@ void GameScene::Update()
 		else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
 	}
 
+	if (input->TriggerKey(DIK_O))
+	{
+		objectToggle = !objectToggle;
+	}
+	if (input->TriggerKey(DIK_P))
+	{
+		particleToggle = !particleToggle;
+	}
+
 	Object3d::SetEye(ParticleManager::GetEye());
 	Object3d::SetTarget(ParticleManager::GetTarget());
 
-	const float rnd_pos = 10.0f;
-	XMFLOAT3 pos{};
-	pos.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
-	pos.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
-	pos.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
+	if (particleToggle)
+	{
+		const float rnd_pos = 10.0f;
+		XMFLOAT3 pos{};
+		pos.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
+		pos.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
+		pos.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_pos;
 
-	const float rnd_vel = 0.1f;
-	XMFLOAT3 vel{};
-	vel.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
-	vel.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
-	vel.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
+		const float rnd_vel = 0.1f;
+		XMFLOAT3 vel{};
+		vel.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
+		vel.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
+		vel.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_vel;
 
-	const float rnd_acc = 0.001f;
-	XMFLOAT3 acc{};
-	acc.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
-	acc.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
-	acc.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
+		const float rnd_acc = 0.001f;
+		XMFLOAT3 acc{};
+		acc.x = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
+		acc.y = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
+		acc.z = ((float)rand() / RAND_MAX - 0.5f) * rnd_acc;
 
-	particleMan->Add(60, pos, vel, acc);
+		particleMan->Add(60, pos, vel, acc);
+	}
 
 	particleMan->Update();
 
@@ -125,9 +137,12 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	object3d->Draw();
-	billboard->Draw();
-	ybillboard->Draw();
+	if (objectToggle)
+	{
+		object3d->Draw();
+		billboard->Draw();
+		ybillboard->Draw();
+	}
 
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる

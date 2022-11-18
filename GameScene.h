@@ -67,5 +67,8 @@ private: // メンバ変数
 	Object3d* ybillboard = nullptr;
 
 	ParticleManager* particleMan = nullptr;
+
+	bool objectToggle = true;
+	bool particleToggle = true;
 };
 
